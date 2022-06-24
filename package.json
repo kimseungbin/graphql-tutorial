@@ -1,0 +1,16 @@
+{
+  "name": "graphql",
+  "version": "1.0.0",
+  "description": "This is small practice repo to learn graphql from few different tutorials.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "apollo-server": "^3.9.0"
+  }
+}
