@@ -4,13 +4,14 @@
   "description": "This is small practice repo to learn graphql from few different tutorials.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "apollo-server": "^3.9.0"
+    "apollo-server": "^3.9.0",
+    "jsonwebtoken": "^8.5.1"
   }
 }
