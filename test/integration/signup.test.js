@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import {Mutation} from "../../src/resolvers/index.js";
 import jwt from 'jsonwebtoken';
 
-test('signup', async t => {
+await test('signup', async t => {
     const testServer = new ApolloServer({
         typeDefs: await fs.readFile(path.join(path.resolve(), 'docs/graphql/schema.graphql'), 'utf-8'),
         resolvers: {Mutation}

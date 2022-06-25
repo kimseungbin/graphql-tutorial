@@ -3,7 +3,7 @@ import {createToken} from "../../src/utils/jwt.js";
 import jwt from 'jsonwebtoken';
 import assert from "node:assert/strict";
 
-test('createToken', t => {
+await test('createToken', t => {
     const payload = {
         email: 'seungbin0508@gmail.com',
         name: 'SeungBin Kim'

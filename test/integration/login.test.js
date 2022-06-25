@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import jwt from "jsonwebtoken";
 import {Mutation} from "../../src/resolvers/index.js";
 
-test('login', async t => {
+await test('login', async t => {
     const testServer = new ApolloServer({
         typeDefs: await fs.readFile(path.join(path.resolve(), 'docs/graphql/schema.graphql'), 'utf-8'),
         resolvers: {Mutation}
@@ -29,14 +29,13 @@ test('login', async t => {
         });
     }
 
-    t.test('should return token', async () => {
+    await t.test('should return token', async () => {
         // todo insert a user into db
 
         const res = await queryLogin({
             email: 'seungbin0508@gmail.com',
             password: 'apple'
         });
-        console.log('hi');
 
         const {errors, data: {login: {token, user: {name, email}}}} = res
         assert.equal(errors, undefined);

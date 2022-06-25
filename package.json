@@ -4,7 +4,7 @@
   "description": "This is small practice repo to learn graphql from few different tutorials.",
   "main": "index.js",
   "scripts": {
-    "test": "node --test"
+    "test": "tap"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +13,9 @@
   "dependencies": {
     "apollo-server": "^3.9.0",
     "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^8.7.1",
+    "tap": "^16.3.0"
   }
 }
