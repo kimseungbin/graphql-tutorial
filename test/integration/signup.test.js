@@ -3,15 +3,15 @@ import {ApolloServer} from "apollo-server";
 import * as fs from "fs/promises";
 import * as path from "path";
 import assert from "node:assert/strict";
-import {Mutation} from "../src/resolvers/index.js";
+import {Mutation} from "../../src/resolvers/index.js";
 import jwt from 'jsonwebtoken';
 
-const testServer = new ApolloServer({
-    typeDefs: await fs.readFile(path.join(path.resolve(), 'docs/graphql/schema.graphql'), 'utf-8'),
-    resolvers: {Mutation}
-});
-
 test('sign up', async t => {
+    const testServer = new ApolloServer({
+        typeDefs: await fs.readFile(path.join(path.resolve(), 'docs/graphql/schema.graphql'), 'utf-8'),
+        resolvers: {Mutation}
+    });
+
     async function querySignup(input) {
         return await testServer.executeOperation({
             // language=GraphQL
@@ -50,8 +50,7 @@ test('sign up', async t => {
     });
 
     await t.test('should fail signing up due to invalid input', async t => {
-        const res = await querySignup()
-
+        const res = await querySignup();
         const {errors} = res;
         assert.equal(!!errors, true);
     });
