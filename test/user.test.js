@@ -12,8 +12,8 @@ const testServer = new ApolloServer({
 });
 
 test('sign up', async t => {
-    await t.test('should return token and user data', async t => {
-        const graphQLResponse = await testServer.executeOperation({
+    async function querySignup(input) {
+        return await testServer.executeOperation({
             // language=GraphQL
             query: `
                 mutation Signup($input: SignupInput!) {
@@ -26,15 +26,18 @@ test('sign up', async t => {
                     }
                 }
             `,
-            variables: {
-                input: {
-                    email: 'seungbin0508@gmail.com',
-                    password: 'hello',
-                    name: 'SeungBin Kim',
-                }
-            }
+            variables: {input}
         });
-        const {errors, data: {signup: {token, user: {name, email}}}} = graphQLResponse;
+    }
+
+    await t.test('should return token and user data', async t => {
+        const res = await querySignup({
+            email: 'seungbin0508@gmail.com',
+            password: 'hello',
+            name: 'SeungBin Kim',
+        });
+
+        const {errors, data: {signup: {token, user: {name, email}}}} = res;
         assert.equal(errors, undefined);
         try {
             // noinspection JSCheckFunctionSignatures
@@ -47,25 +50,9 @@ test('sign up', async t => {
     });
 
     await t.test('should fail signing up due to invalid input', async t => {
-        const graphQLResponse = await testServer.executeOperation({
-            // language=GraphQL
-            query: `
-                mutation InvalidSignup($input: SignupInput!) {
-                    signup(input: $input) {
-                        token
-                        user {
-                            name
-                            email
-                        }
-                    }
-                }
-            `,
-            variables: {
-                input: {}
-            }
-        });
+        const res = await querySignup()
 
-        const {errors} = graphQLResponse;
+        const {errors} = res;
         assert.equal(!!errors, true);
     });
 });
