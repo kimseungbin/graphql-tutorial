@@ -17,3 +17,4 @@ await test('createToken', t => {
     assert.equal(payload.name, returnPayload.name)
     assert.equal(returnPayload.exp - returnPayload.iat, twoDaysInSec)
 })
+
