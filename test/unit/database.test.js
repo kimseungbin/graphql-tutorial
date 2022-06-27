@@ -14,3 +14,11 @@ await test('Connect to database', async t => {
         await connection.stopDatabase();
     }
 });
+
+await test('Create a member account', async t => {
+    try {
+        await createMember();
+    } catch (e) {
+        assert.ifError(e);
+    }
+});
