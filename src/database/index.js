@@ -1,4 +1,4 @@
-import {MongoClient} from "mongodb";
+import {MongoClient, Collection} from "mongodb";
 
 export default async function connectDB(uri) {
     const client = new MongoClient(uri);
@@ -20,7 +20,18 @@ export default async function connectDB(uri) {
  * @param client {MongoClient}
  * @returns {import('mongodb').Db}
  */
-export function getDB(client) {
+function getDB(client) {
     const {env: {NODE_ENV}} = process;
     return client.db(NODE_ENV);
+}
+
+/**
+ *
+ * @param client {MongoClient}
+ * @param collection {string} name of the collection
+ * @returns {Collection<Document>}
+ */
+export function getCollection(client, collection) {
+    const db = getDB(client);
+    return db.collection(collection);
 }

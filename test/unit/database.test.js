@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import createInMemoryConnection from "../../src/utils/inMemoryDB.js";
 import {ObjectId} from 'mongodb';
-import {createMember} from "../../src/user/db.js";
+import {createMember, findMember} from "../../src/user/db.js";
 
 const member = {
     name: 'SeungBin Kim',
@@ -25,7 +25,7 @@ await test('Create a member account', async t => {
     const client = await createInMemoryConnection();
 
     try {
-        const insertedId = await createMember({client}, member);
+        const insertedId = await createMember({client}, {...member});
         const result = ObjectId.isValid(insertedId);
         assert.ok(result);
     } catch (e) {
@@ -37,11 +37,12 @@ await test('Create a member account', async t => {
 
 await test('Find a member account', async t => {
     const client = await createInMemoryConnection();
-
     try {
-        const insertedId = await createMember({client}, member);
-        const member = await findMember({client}, insertedId);
-        const result = Object.entries(member).every(([key, value]) => member[key] === value);
+        const insertedId = await createMember({client}, {...member});
+        const insertedMember = await findMember({client}, insertedId);
+        const result = Object.entries(member).every(([key, value]) => {
+            return insertedMember[key] === value;
+        });
         assert.ok(result);
     } catch (e) {
         assert.ifError(e);
