@@ -5,12 +5,22 @@ export default async function connectDB(uri) {
 
     try {
         await client.connect();
-        await client.db('admin').command({ ping: 1})
+        await client.db('admin').command({ping: 1});
         if (process.env.NODE_ENV === 'development') {
-            console.log('Database connected successfully to server')
+            console.log('Database connected successfully to server');
         }
     } catch (e) {
-        throw e
+        throw e;
     }
-    return client
+    return client;
+}
+
+/**
+ *
+ * @param client {MongoClient}
+ * @returns {import('mongodb').Db}
+ */
+export function getDB(client) {
+    const {env: {NODE_ENV}} = process;
+    return client.db(NODE_ENV);
 }
