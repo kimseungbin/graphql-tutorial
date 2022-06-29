@@ -5,11 +5,16 @@ import path from "path";
 import assert from "node:assert/strict";
 import {Mutation} from "../../src/resolvers/index.js";
 import jwt from 'jsonwebtoken';
+import createInMemoryDB from "../../src/utils/inMemoryDB.js";
 
 await test('signup', async t => {
+    const client = await createInMemoryDB();
     const testServer = new ApolloServer({
         typeDefs: await fs.readFile(path.join(path.resolve(), 'docs/graphql/schema.graphql'), 'utf-8'),
-        resolvers: {Mutation}
+        resolvers: {Mutation},
+        context: async () => ({
+            client
+        })
     });
 
     async function querySignup(input) {
@@ -37,7 +42,9 @@ await test('signup', async t => {
             name: 'SeungBin Kim',
         });
 
+        console.log(res.errors);
         const {errors, data: {signup: {token, user: {name, email}}}} = res;
+        console.log('token', token);
         assert.equal(errors, undefined);
         try {
             // noinspection JSCheckFunctionSignatures
@@ -54,4 +61,6 @@ await test('signup', async t => {
         const {errors} = res;
         assert.equal(!!errors, true);
     });
+
+    await client.stopDatabase();
 });

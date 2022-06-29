@@ -1,15 +1,20 @@
 import {createToken} from "../utils/jwt.js";
+import {createMember, findMember} from "../user/db.js";
 
-export async function signup(parent, args, context, info) {
-    const {input: {name, email}} = args;
+export async function signup(parent, args, ctx, info) {
+    const {input, input: {name, email}} = args;
     const token = createToken({name, email});
-    return {
-        token,
-        user: {
-            name,
-            email
-        }
-    };
+
+    try {
+        const _id = await createMember(ctx, input);
+        const member = await findMember(ctx, _id);
+        return {
+            token,
+            user: {...member}
+        };
+    } catch (e) {
+        throw e;
+    }
 }
 
 export async function login(parent, args, context, info) {
