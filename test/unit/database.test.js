@@ -41,6 +41,7 @@ await test('Find a member account', async t => {
         const insertedId = await createMember({client}, {...member});
         const insertedMember = await findMember({client}, insertedId);
         const result = Object.entries(member).every(([key, value]) => {
+            if (key === "password") return true;
             return insertedMember[key] === value;
         });
         assert.ok(result);

@@ -1,5 +1,6 @@
 import {getCollection} from "../database/index.js";
 import {ObjectId} from "mongodb";
+import hashPassword from "../utils/hashPasssword.js";
 
 
 /**
@@ -9,8 +10,16 @@ import {ObjectId} from "mongodb";
  * @returns {Promise<ObjectId>}
  */
 export async function createMember(ctx, document) {
-    const {/**@type {import('mongodb').MongoClient} */ client} = ctx;
-    const Members = getCollection(client, 'members');
+    const {/**@type {import("mongodb").MongoClient} */ client} = ctx;
+    const {password} = document;
+    const {hash, salt} = hashPassword(password);
+    document = {
+        ...document,
+        password: hash,
+        salt
+    };
+
+    const Members = getCollection(client, "members");
 
     try {
         const { /** @type {ObjectId} */ insertedId} = await Members.insertOne(document);
