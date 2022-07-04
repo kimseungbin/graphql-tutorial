@@ -5,12 +5,15 @@ import path from "path";
 import assert from "node:assert/strict";
 import jwt from "jsonwebtoken";
 import {Mutation} from "../../src/resolvers/index.js";
+import {createMember} from "../../src/user/db.js";
+import createInMemoryConnection from "../../src/utils/inMemoryDB.js";
 
-await test('login', async t => {
+await test("login", async t => {
     const testServer = new ApolloServer({
-        typeDefs: await fs.readFile(path.join(path.resolve(), 'docs/graphql/schema.graphql'), 'utf-8'),
+        typeDefs: await fs.readFile(path.join(path.resolve(), "docs/graphql/schema.graphql"), "utf-8"),
         resolvers: {Mutation}
     });
+
     async function queryLogin(input) {
         return await testServer.executeOperation({
             // language=GraphQL
@@ -31,13 +34,19 @@ await test('login', async t => {
 
     await t.test('should return token', async () => {
         // todo insert a user into db
-
-        const res = await queryLogin({
-            email: 'seungbin0508@gmail.com',
-            password: 'apple'
+        const client = await createInMemoryConnection();
+        await createMember({client}, {
+            email: "seungbin0508@gmail.com",
+            name: "SeungBin Kim",
+            password: "password"
         });
 
-        const {errors, data: {login: {token, user: {name, email}}}} = res
+        const res = await queryLogin({
+            email: "seungbin0508@gmail.com",
+            password: "password"
+        });
+
+        const {errors, data: {login: {token, user: {name, email}}}} = res;
         assert.equal(errors, undefined);
         try {
             // noinspection JSCheckFunctionSignatures
@@ -46,6 +55,7 @@ await test('login', async t => {
             assert.ifError(e)
         }
         assert.equal(name, 'SeungBin Kim');
-        assert.equal(email, 'seungbin0508@gmail.com');
+        assert.equal(email, "seungbin0508@gmail.com");
+        await client.stopDatabase();
     });
 });
