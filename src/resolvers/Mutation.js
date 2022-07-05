@@ -7,7 +7,8 @@ export async function signup(parent, args, ctx, info) {
 
     try {
         const _id = await createMember(ctx, input);
-        const member = await findMember(ctx, _id);
+        const filter = {_id};
+        const member = await findMember(ctx, filter);
         return {
             token,
             user: {...member}
@@ -21,7 +22,7 @@ export async function login(parent, args, context, info) {
     // todo get user name from db
     // todo check if user exists
     // todo validate password
-    const name = 'SeungBin Kim';
+    const name = "SeungBin Kim";
 
     const {input: {email, password}} = args;
     const token = createToken({name, email});
@@ -32,5 +33,4 @@ export async function login(parent, args, context, info) {
             email
         }
     };
-
 }

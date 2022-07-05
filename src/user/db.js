@@ -32,15 +32,15 @@ export async function createMember(ctx, document) {
 /**
  *
  * @param ctx
- * @param _id {ObjectId}
+ * @param filter {Object}
  * @returns {Promise<Document>}
  */
-export async function findMember(ctx, _id) {
-    const {/**@type {import('mongodb').MongoClient} */ client} = ctx;
-    const Members = getCollection(client, 'members');
+export async function findMember(ctx, filter) {
+    const {/**@type {import("mongodb").MongoClient} */ client} = ctx;
+    const Members = getCollection(client, "members");
 
     try {
-        return await Members.findOne({_id});
+        return await Members.findOne(filter);
     } catch (e) {
         throw e;
     }
