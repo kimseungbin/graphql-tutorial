@@ -4,7 +4,7 @@ import fs from "fs/promises";
 import path from "path";
 import assert from "node:assert/strict";
 import {Mutation} from "../../src/resolvers/index.js";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import createInMemoryDB from "../../src/utils/inMemoryDB.js";
 
 await test('signup', async t => {
@@ -42,9 +42,7 @@ await test('signup', async t => {
             name: 'SeungBin Kim',
         });
 
-        console.log(res.errors);
         const {errors, data: {signup: {token, user: {name, email}}}} = res;
-        console.log('token', token);
         assert.equal(errors, undefined);
         try {
             // noinspection JSCheckFunctionSignatures
