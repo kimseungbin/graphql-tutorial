@@ -42,20 +42,26 @@ await test("login", async t => {
             name: "SeungBin Kim",
             password: "password"
         });
-        const res = await queryLogin({
-            email: "seungbin0508@gmail.com",
-            password: "password"
-        });
-        const {errors, data: {login: {token, user: {name, email}}}} = res;
-        assert.equal(errors, undefined);
         try {
+            const res = await queryLogin({
+                email: "seungbin0508@gmail.com",
+                password: "password"
+            });
+
+            const {errors} = res;
+            assert.equal(errors, undefined);
+
+            const {data: {login: {token, user: {name, email}}}} = res;
+
             // noinspection JSCheckFunctionSignatures
             jwt.verify(token, "jwt-secret");
+            assert.equal(name, "SeungBin Kim");
+            assert.equal(email, "seungbin0508@gmail.com");
         } catch (e) {
             assert.ifError(e);
+        } finally {
+            await client.stopDatabase();
         }
-        assert.equal(name, "SeungBin Kim");
-        assert.equal(email, "seungbin0508@gmail.com");
-        await client.stopDatabase();
+
     });
 });
