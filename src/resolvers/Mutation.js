@@ -16,7 +16,8 @@ export async function signup(parent, args, ctx, info) {
             user: {...member}
         };
     } catch (e) {
-        throw e;
+        console.error(e);
+        return e;
     }
 }
 
@@ -45,7 +46,8 @@ export async function login(parent, args, context, info) {
             }
         };
     } catch (e) {
-
+        console.error(e);
+        return e;
     }
 
 }
