@@ -15,4 +15,18 @@ await test("logout", async t => {
             client
         })
     });
+
+    async function queryLogout(input) {
+        return await testServer.executeOperation({
+            // language=GraphQL
+            query: `
+                mutation Logout($input: LogoutInput!) {
+                    logout(input: $input) {
+                        success
+                    }
+                }
+            `,
+            variables: {input}
+        });
+    }
 });
